@@ -4,23 +4,23 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\ParsingException;
-use Questions\Repositories\JsonQuestionsRepository;
-use Questions\Transformers\JsonTransformer;
+use Questions\Repositories\CsvQuestionsRepository;
+use Questions\Transformers\CsvTransformer;
 
-class JsonQuestionRepositoryTest extends TestCase
+class CsvQuestionsRepositoryTest extends TestCase
 {
     /** @test */
-    public function it_throws_file_not_found_exception_if_json_doesnt_exists(): void
+    public function it_throws_file_not_found_exception_if_csv_doesnt_exists(): void
     {
         $this->expectException(FileNotFoundException::class);
-        new JsonQuestionsRepository(new JsonTransformer(), 'wrong path to json');
+        (new CsvQuestionsRepository(new CsvTransformer(), 'invalid path to csv'))->all();
     }
 
     /** @test */
     public function it_throws_json_exception_when_invalid_json_provided(): void
     {
         $this->expectException(ParsingException::class);
-        $repository = new JsonQuestionsRepository(new JsonTransformer(), __DIR__.'/jsons/invalid_questions.json');
+        $repository = new CsvQuestionsRepository(new CsvTransformer(), __DIR__.'/csvs/invalid_questions.csv');
         $repository->all();
     }
 
@@ -31,23 +31,23 @@ class JsonQuestionRepositoryTest extends TestCase
     public function it_throws_parsing_exception_when_unexpected_json_structure_provided($jsonPath): void
     {
         $this->expectException(ParsingException::class);
-        $repository = new JsonQuestionsRepository(new JsonTransformer(), $jsonPath);
+        $repository = new CsvQuestionsRepository(new CsvTransformer(), $jsonPath);
         $repository->all();
     }
 
     public function unexpectedJsonsProvider(): array
     {
         return [
-            [__DIR__.'/jsons/unexpected_text_questions.json'],
-            [__DIR__.'/jsons/unexpected_choices_questions.json'],
-            [__DIR__.'/jsons/unexpected_created_at_questions.json'],
+            [__DIR__.'/csvs/unexpected_text_questions.csv'],
+            [__DIR__.'/csvs/unexpected_choices_questions.csv'],
+            [__DIR__.'/csvs/unexpected_created_at_questions.csv'],
         ];
     }
 
     /** @test */
     public function it_fetches_repositories_from_json_file(): void
     {
-        $repository = new JsonQuestionsRepository(new JsonTransformer(), __DIR__.'/jsons/questions.json');
+        $repository = new CsvQuestionsRepository(new CsvTransformer(), __DIR__.'/csvs/questions.csv');
 
         $questions = $repository->all();
 

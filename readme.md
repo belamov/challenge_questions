@@ -1,4 +1,6 @@
+__TODO: handling of concurrent reading and writing of files__
 __TODO: docs for running service__
+
 
 ## Instructions
 The goal of the exercise is to create a REST API that will handle two different resources :

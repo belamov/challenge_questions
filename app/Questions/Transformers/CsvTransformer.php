@@ -10,7 +10,7 @@ use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\ParsingException;
 use Throwable;
 
-class JsonTransformer
+class CsvTransformer
 {
     /**
      * @throws ParsingException
@@ -32,10 +32,10 @@ class JsonTransformer
     protected function parseCreatedAt($data): DateTimeInterface
     {
         try {
-            return new DateTime($data['createdAt']);
+            return new DateTime($data[1]);
         } catch (Throwable $exception) {
             throw new ParsingException(
-                message: "unable to parse json: ".json_encode($data, JSON_THROW_ON_ERROR),
+                message: "unable to parse 'created at' from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
                 previous: $exception
             );
         }
@@ -48,10 +48,10 @@ class JsonTransformer
     protected function parseText($data): string
     {
         try {
-            return $data['text'];
+            return $data[0];
         } catch (Throwable $exception) {
             throw new ParsingException(
-                message: "unable to parse json: ".json_encode($data, JSON_THROW_ON_ERROR),
+                message: "unable to parse 'text' from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
                 previous: $exception
             );
         }
@@ -64,11 +64,14 @@ class JsonTransformer
     protected function parseChoices($data): array
     {
         try {
-            $choices = $data['choices'];
-            return array_map(static fn($choice) => new QuestionChoice($choice['text']), $choices);
+            return [
+                new QuestionChoice($data[2]),
+                new QuestionChoice($data[3]),
+                new QuestionChoice($data[4]),
+            ];
         } catch (Throwable $exception) {
             throw new ParsingException(
-                message: "unable to parse json: ".json_encode($data, JSON_THROW_ON_ERROR),
+                message: "unable to parse choices from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
                 previous: $exception
             );
         }

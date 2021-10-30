@@ -5,6 +5,7 @@ namespace Questions\Repositories;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use JsonException;
+use Questions\Exceptions\ParsingException;
 use Questions\Transformers\JsonTransformer;
 
 class JsonQuestionsRepository implements QuestionsRepositoryInterface
@@ -40,10 +41,17 @@ class JsonQuestionsRepository implements QuestionsRepositoryInterface
     }
 
     /**
-     * @throws JsonException
+     * @throws ParsingException
      */
     private function decodeJson(string $pathToJson): array
     {
-        return json_decode(file_get_contents($pathToJson), true, 512, JSON_THROW_ON_ERROR);
+        try {
+            return json_decode(file_get_contents($pathToJson), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\Throwable $exception) {
+            throw new ParsingException(
+                message: "cant parse file '$pathToJson'",
+                previous: $exception,
+            );
+        }
     }
 }
