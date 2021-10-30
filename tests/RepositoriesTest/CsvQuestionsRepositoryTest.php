@@ -95,4 +95,64 @@ class CsvQuestionsRepositoryTest extends TestCase
         $this->assertEquals("Open Assessment Technologies", $choices[1]->getText());
         $this->assertEquals("Open Acknowledgment Technologies", $choices[2]->getText());
     }
+
+    /** @test */
+    public function it_adds_question_to_csv_file(): void
+    {
+        $filePath = __DIR__.'/csvs/questions-add.csv';
+        copy(__DIR__.'/csvs/questions.csv', $filePath);
+        $repository = new FileQuestionsRepository(
+            new CsvTransformer(),
+            new CsvFileDecoder(),
+            $filePath
+        );
+        $this->assertCount(2, $repository->all());
+
+        $newQuestion = new Question(
+            'text',
+            new DateTime(),
+            [
+                new QuestionChoice('choice1'),
+                new QuestionChoice('choice2'),
+                new QuestionChoice('choice3'),
+            ]
+        );
+
+        $addedQuestion = $repository->add($newQuestion);
+        $this->assertEquals($newQuestion, $addedQuestion);
+        $this->assertCount(3, $repository->all());
+        $this->assertEquals($newQuestion->toArray(), $repository->all()[2]->toArray());
+        unlink($filePath);
+    }
+
+    /** @test */
+    public function it_writes_heading_row_if_file_is_empty(): void
+    {
+        $filePath = __DIR__.'/csvs/questions-add-empty.csv';
+        $f = fopen($filePath, 'wb');
+        fclose($f);
+
+        $repository = new FileQuestionsRepository(
+            new CsvTransformer(),
+            new CsvFileDecoder(),
+            $filePath
+        );
+        $this->assertCount(0, $repository->all());
+
+        $newQuestion = new Question(
+            'text',
+            new DateTime(),
+            [
+                new QuestionChoice('choice1'),
+                new QuestionChoice('choice2'),
+                new QuestionChoice('choice3'),
+            ]
+        );
+
+        $addedQuestion = $repository->add($newQuestion);
+        $this->assertEquals($newQuestion, $addedQuestion);
+        $this->assertCount(1, $repository->all());
+        $this->assertEquals($newQuestion->toArray(), $repository->all()[0]->toArray());
+        unlink($filePath);
+    }
 }

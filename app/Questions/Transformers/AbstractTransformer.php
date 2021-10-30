@@ -12,7 +12,7 @@ use Throwable;
 
 abstract class AbstractTransformer
 {
-    public function transform(array $data): Question
+    public function transformFromFile(array $data): Question
     {
         $createdAt = $this->parseCreatedAt($data);
         $text = $this->parseText($data);
@@ -20,6 +20,8 @@ abstract class AbstractTransformer
 
         return new Question($text, $createdAt, $choices);
     }
+
+    abstract public function transformToFile(Question $question): array;
 
     abstract protected function parseCreatedAt(array $data): DateTimeInterface;
 

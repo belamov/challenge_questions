@@ -10,4 +10,6 @@ interface QuestionsRepositoryInterface
      * @return array<Question>
      */
     public function all(): array;
+
+    public function add(Question $question): Question;
 }

@@ -96,4 +96,33 @@ class JsonQuestionRepositoryTest extends TestCase
         $this->assertEquals("Open Assessment Technologies", $choices[1]->getText());
         $this->assertEquals("Open Acknowledgment Technologies", $choices[2]->getText());
     }
+
+    /** @test */
+    public function it_adds_question_to_csv_file(): void
+    {
+        $filePath = __DIR__.'/jsons/questions-add.json';
+        copy(__DIR__.'/jsons/questions.json', $filePath);
+        $repository = new FileQuestionsRepository(
+            new JsonTransformer(),
+            new JsonFileDecoder(),
+            $filePath
+        );
+        $this->assertCount(2, $repository->all());
+
+        $newQuestion = new Question(
+            'text',
+            new DateTime(),
+            [
+                new QuestionChoice('choice1'),
+                new QuestionChoice('choice2'),
+                new QuestionChoice('choice3'),
+            ]
+        );
+
+        $addedQuestion = $repository->add($newQuestion);
+        $this->assertEquals($newQuestion, $addedQuestion);
+        $this->assertCount(3, $repository->all());
+        $this->assertEquals($newQuestion->toArray(), $repository->all()[2]->toArray());
+        unlink($filePath);
+    }
 }

@@ -5,6 +5,7 @@ namespace Questions\Transformers;
 use DateTime;
 use DateTimeInterface;
 use JsonException;
+use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\ParsingException;
 use Throwable;
@@ -61,5 +62,17 @@ class CsvTransformer extends AbstractTransformer
                 previous: $exception
             );
         }
+    }
+
+    public function transformToFile(Question $question): array
+    {
+        $data = [
+            $question->getText(),
+            $question->getCreatedAt()->format('Y-m-d H:i:s'),
+        ];
+        foreach ($question->getChoices() as $choice) {
+            $data[] = $choice->getText();
+        }
+        return $data;
     }
 }

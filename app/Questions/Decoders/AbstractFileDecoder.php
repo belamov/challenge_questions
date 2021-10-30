@@ -17,4 +17,6 @@ abstract class AbstractFileDecoder
     }
 
     abstract public function decode(string $pathToFile): array;
+
+    abstract public function encode(array $data): string;
 }

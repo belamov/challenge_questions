@@ -2,13 +2,13 @@
 - [x] fetching questions from csv
 - [x] fetching questions with api
 - [x] fetching translated questions with api
-- [ ] adding new questions
+- [x] adding new questions
+- [ ] endpoint for adding new question
 - [ ] handling big json files
 - [ ] handling concurrent json writing
 - [ ] handling big csv files
 - [ ] handling concurrent csv writing
 
-__TODO: handling of concurrent reading and writing of files__
 __TODO: docs for running service__
 
 ## Instructions
