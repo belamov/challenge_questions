@@ -16,3 +16,4 @@
 use Laravel\Lumen\Routing\Router;
 
 $router->get('/questions', ['as' => 'questions.index', 'uses' => 'QuestionsController@index']);
+$router->post('/questions', ['as' => 'questions.create', 'uses' => 'QuestionsController@create']);
