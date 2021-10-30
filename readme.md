@@ -1,15 +1,3 @@
-- [x] fetching questions from json
-- [x] fetching questions from csv
-- [x] fetching questions with api
-- [x] questions translation
-- [x] fetching translated questions with api
-- [x] adding new questions
-- [x] endpoint for adding new question
-- [ ] handling big json files
-- [ ] handling concurrent json writing
-- [ ] handling big csv files
-- [ ] handling concurrent csv writing
-
 this is a technical exercise for job assessment (php backend developer position)
 
 you can read task [here](task.md)
@@ -35,3 +23,17 @@ JSON_PATH=
 ```
 
 for api documentation check [open-api.yml](open-api.yaml)
+
+### todo:
+
+- [x] fetching questions from json
+- [x] fetching questions from csv
+- [x] fetching questions with api
+- [x] questions translation
+- [x] fetching translated questions with api
+- [x] adding new questions
+- [x] endpoint for adding new question
+- [ ] handling big json files?
+- [ ] handling concurrent json writing?
+- [ ] handling big csv files?
+- [ ] handling concurrent csv writing?
