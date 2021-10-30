@@ -1,3 +1,5 @@
+[![tests](https://github.com/belamov/challenge_questions/actions/workflows/main.yml/badge.svg)](https://github.com/belamov/challenge_questions/actions/workflows/main.yml)
+
 this is a technical exercise for job assessment (php backend developer position)
 
 you can read task [here](task.md)
@@ -34,6 +36,7 @@ for api documentation check [open-api.yml](open-api.yaml)
 - [x] adding new questions
 - [x] endpoint for adding new question
 - [ ] make composer-require-checker pass
+- [ ] add other checks (except tests) to ci - move ci to docker
 - [ ] handling big json files?
 - [ ] handling concurrent json writing?
 - [ ] handling big csv files?
