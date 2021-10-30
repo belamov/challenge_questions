@@ -26,7 +26,6 @@ class QuestionsController extends Controller
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-        //TODO: validation of language - it must be ISO-639-1 code
         $this->validate($request, [
             'lang' => 'required|string|size:2'
         ]);

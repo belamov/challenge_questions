@@ -21,14 +21,14 @@ abstract class AbstractTransformer
         return new Question($text, $createdAt, $choices);
     }
 
-    abstract public function transformToFile(Question $question): array;
+    abstract protected function parseText(array $data): string;
 
     abstract protected function parseCreatedAt(array $data): DateTimeInterface;
-
-    abstract protected function parseText(array $data): string;
 
     /**
      * @return array<QuestionChoice>
      */
     abstract protected function parseChoices(array $data): array;
+
+    abstract public function transformToFile(Question $question): array;
 }

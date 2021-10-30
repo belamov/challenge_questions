@@ -12,15 +12,11 @@ use Questions\Transformers\CsvTransformer;
 
 class FileQuestionsRepository implements QuestionsRepositoryInterface
 {
-    protected string $pathToFile;
-    protected AbstractTransformer $transformer;
-    protected AbstractFileDecoder $decoder;
-
-    public function __construct(AbstractTransformer $transformer, AbstractFileDecoder $decoder, string $pathToFile)
-    {
-        $this->pathToFile = $pathToFile;
-        $this->transformer = $transformer;
-        $this->decoder = $decoder;
+    public function __construct(
+        protected AbstractTransformer $transformer,
+        protected AbstractFileDecoder $decoder,
+        protected string $pathToFile
+    ) {
     }
 
     /**

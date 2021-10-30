@@ -21,10 +21,10 @@ class JsonTransformer extends AbstractTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseCreatedAt(array $data): DateTimeInterface
+    protected function parseText(array $data): string
     {
         try {
-            return new DateTime($data[self::QUESTION_CREATED_AT_KEY]);
+            return $data[self::QUESTION_TEXT_KEY];
         } catch (Throwable $exception) {
             throw new ParsingException(
                 message: "unable to parse json: ".json_encode($data, JSON_THROW_ON_ERROR),
@@ -37,10 +37,10 @@ class JsonTransformer extends AbstractTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseText(array $data): string
+    protected function parseCreatedAt(array $data): DateTimeInterface
     {
         try {
-            return $data[self::QUESTION_TEXT_KEY];
+            return new DateTime($data[self::QUESTION_CREATED_AT_KEY]);
         } catch (Throwable $exception) {
             throw new ParsingException(
                 message: "unable to parse json: ".json_encode($data, JSON_THROW_ON_ERROR),

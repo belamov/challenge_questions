@@ -12,17 +12,23 @@ use Throwable;
 
 class CsvTransformer extends AbstractTransformer
 {
+    private const QUESTION_TEXT_INDEX = 0;
+    private const QUESTION_CREATED_AT_INDEX = 1;
+    private const CHOICE_1_TEXT_INDEX = 2;
+    private const CHOICE_2_TEXT_INDEX = 3;
+    private const CHOICE_3_TEXT_INDEX = 4;
+
     /**
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseCreatedAt(array $data): DateTimeInterface
+    protected function parseText(array $data): string
     {
         try {
-            return new DateTime($data[1]);
+            return $data[self::QUESTION_TEXT_INDEX];
         } catch (Throwable $exception) {
             throw new ParsingException(
-                message: "unable to parse 'created at' from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
+                message: "unable to parse 'text' from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
                 previous: $exception
             );
         }
@@ -32,13 +38,13 @@ class CsvTransformer extends AbstractTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseText(array $data): string
+    protected function parseCreatedAt(array $data): DateTimeInterface
     {
         try {
-            return $data[0];
+            return new DateTime($data[self::QUESTION_CREATED_AT_INDEX]);
         } catch (Throwable $exception) {
             throw new ParsingException(
-                message: "unable to parse 'text' from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
+                message: "unable to parse 'created at' from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
                 previous: $exception
             );
         }
@@ -52,9 +58,9 @@ class CsvTransformer extends AbstractTransformer
     {
         try {
             return [
-                new QuestionChoice($data[2]),
-                new QuestionChoice($data[3]),
-                new QuestionChoice($data[4]),
+                new QuestionChoice($data[self::CHOICE_1_TEXT_INDEX]),
+                new QuestionChoice($data[self::CHOICE_2_TEXT_INDEX]),
+                new QuestionChoice($data[self::CHOICE_3_TEXT_INDEX]),
             ];
         } catch (Throwable $exception) {
             throw new ParsingException(
@@ -66,13 +72,14 @@ class CsvTransformer extends AbstractTransformer
 
     public function transformToFile(Question $question): array
     {
-        $data = [
-            $question->getText(),
-            $question->getCreatedAt()->format('Y-m-d H:i:s'),
-        ];
-        foreach ($question->getChoices() as $choice) {
-            $data[] = $choice->getText();
-        }
+        $data = [];
+
+        $data[self::QUESTION_TEXT_INDEX] = $question->getText();
+        $data[self::QUESTION_CREATED_AT_INDEX] = $question->getCreatedAt()->format('Y-m-d H:i:s');
+        $data[self::CHOICE_1_TEXT_INDEX] = $question->getChoices()[0]->getText();
+        $data[self::CHOICE_2_TEXT_INDEX] = $question->getChoices()[1]->getText();
+        $data[self::CHOICE_3_TEXT_INDEX] = $question->getChoices()[2]->getText();
+
         return $data;
     }
 }
