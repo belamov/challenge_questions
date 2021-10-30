@@ -1,12 +1,12 @@
-[x] fetching questions from json
-[x] fetching questions from csv
-[] fetching questions with api
-[] fetching translated questions with api
-[] adding new questions
-[] handling big json files
-[] handling concurrent json writing
-[] handling big csv files
-[] handling concurrent csv writing
+- [x] fetching questions from json
+- [x] fetching questions from csv
+- [] fetching questions with api
+- [] fetching translated questions with api
+- [] adding new questions
+- [] handling big json files
+- [] handling concurrent json writing
+- [] handling big csv files
+- [] handling concurrent csv writing
 
 __TODO: handling of concurrent reading and writing of files__
 __TODO: docs for running service__
