@@ -33,6 +33,7 @@ for api documentation check [open-api.yml](open-api.yaml)
 - [x] fetching translated questions with api
 - [x] adding new questions
 - [x] endpoint for adding new question
+- [ ] make composer-require-checker pass
 - [ ] handling big json files?
 - [ ] handling concurrent json writing?
 - [ ] handling big csv files?

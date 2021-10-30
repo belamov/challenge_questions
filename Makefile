@@ -35,7 +35,7 @@ infection: check-environment ## Run infection
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=coverage "$(php_container_name)" vendor/bin/infection
 
 test: check-environment ## Execute tests
-	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" /bin/bash -c "php artisan test --parallel"
+	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" /app/vendor/bin/phpunit
 
 composer-validate: ## Validate composer file
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer validate --strict
@@ -46,11 +46,10 @@ composer-require-check: ## Check soft dependencies
 composer-unused: ## Check soft dependencies
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer-unused
 
-check: check-environment composer-validate test composer-require-check composer-unused ## Run tests and code analysis
+check: check-environment composer-validate test composer-unused composer-require-check ## Run tests and code analysis
 
 shell: check-environment ## Run shell environment in container
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -u $(user_id) "$(php_container_name)" /bin/bash
-
 
 stop: ## Stop all containers
 	$(docker_compose_bin) --file "$(docker_compose_yml)" down
