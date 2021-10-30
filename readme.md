@@ -1,6 +1,6 @@
 - [x] fetching questions from json
 - [x] fetching questions from csv
-- [ ] fetching questions with api
+- [x] fetching questions with api
 - [ ] fetching translated questions with api
 - [ ] adding new questions
 - [ ] handling big json files

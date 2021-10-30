@@ -3,8 +3,9 @@
 namespace Questions\Entities;
 
 use DateTimeInterface;
+use Illuminate\Contracts\Support\Arrayable;
 
-class Question
+class Question implements Arrayable
 {
     public function __construct(
         private string $text,
@@ -29,5 +30,14 @@ class Question
     public function getChoices(): array
     {
         return $this->choices;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'text' => $this->getText(),
+            'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'choices' => array_map(static fn(QuestionChoice $choice) => $choice->toArray(), $this->getChoices())
+        ];
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Questions\Entities;
 
-class QuestionChoice
+use Illuminate\Contracts\Support\Arrayable;
+
+class QuestionChoice implements Arrayable
 {
     public function __construct(private string $text)
     {
@@ -11,5 +13,12 @@ class QuestionChoice
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'text' => $this->getText()
+        ];
     }
 }
