@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Questions\Decoders\JsonFileDecoder;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\ParsingException;
+use Questions\Repositories\FileQuestionsRepository;
 use Questions\Repositories\JsonQuestionsRepository;
 use Questions\Transformers\JsonTransformer;
 
@@ -13,14 +15,23 @@ class JsonQuestionRepositoryTest extends TestCase
     public function it_throws_file_not_found_exception_if_json_doesnt_exists(): void
     {
         $this->expectException(FileNotFoundException::class);
-        new JsonQuestionsRepository(new JsonTransformer(), 'wrong path to json');
+        $repository = new FileQuestionsRepository(
+            new JsonTransformer(),
+            new JsonFileDecoder(),
+            'wrong path to json'
+        );
+        $repository->all();
     }
 
     /** @test */
     public function it_throws_json_exception_when_invalid_json_provided(): void
     {
         $this->expectException(ParsingException::class);
-        $repository = new JsonQuestionsRepository(new JsonTransformer(), __DIR__.'/jsons/invalid_questions.json');
+        $repository = new FileQuestionsRepository(
+            new JsonTransformer(),
+            new JsonFileDecoder(),
+            __DIR__.'/jsons/invalid_questions.json'
+        );
         $repository->all();
     }
 
@@ -31,7 +42,11 @@ class JsonQuestionRepositoryTest extends TestCase
     public function it_throws_parsing_exception_when_unexpected_json_structure_provided($jsonPath): void
     {
         $this->expectException(ParsingException::class);
-        $repository = new JsonQuestionsRepository(new JsonTransformer(), $jsonPath);
+        $repository = new FileQuestionsRepository(
+            new JsonTransformer(),
+            new JsonFileDecoder(),
+            $jsonPath
+        );
         $repository->all();
     }
 
@@ -47,7 +62,11 @@ class JsonQuestionRepositoryTest extends TestCase
     /** @test */
     public function it_fetches_repositories_from_json_file(): void
     {
-        $repository = new JsonQuestionsRepository(new JsonTransformer(), __DIR__.'/jsons/questions.json');
+        $repository = new FileQuestionsRepository(
+            new JsonTransformer(),
+            new JsonFileDecoder(),
+            __DIR__.'/jsons/questions.json'
+        );
 
         $questions = $repository->all();
 

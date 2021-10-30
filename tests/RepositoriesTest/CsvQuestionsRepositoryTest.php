@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Questions\Decoders\CsvFileDecoder;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\ParsingException;
-use Questions\Repositories\CsvQuestionsRepository;
+use Questions\Repositories\FileQuestionsRepository;
 use Questions\Transformers\CsvTransformer;
 
 class CsvQuestionsRepositoryTest extends TestCase
@@ -13,14 +14,23 @@ class CsvQuestionsRepositoryTest extends TestCase
     public function it_throws_file_not_found_exception_if_csv_doesnt_exists(): void
     {
         $this->expectException(FileNotFoundException::class);
-        (new CsvQuestionsRepository(new CsvTransformer(), 'invalid path to csv'))->all();
+        $repository = new FileQuestionsRepository(
+            new CsvTransformer(),
+            new CsvFileDecoder(),
+            'invalid path to csv'
+        );
+        $repository->all();
     }
 
     /** @test */
     public function it_throws_json_exception_when_invalid_json_provided(): void
     {
         $this->expectException(ParsingException::class);
-        $repository = new CsvQuestionsRepository(new CsvTransformer(), __DIR__.'/csvs/invalid_questions.csv');
+        $repository = new FileQuestionsRepository(
+            new CsvTransformer(),
+            new CsvFileDecoder(),
+            __DIR__.'/csvs/invalid_questions.csv'
+        );
         $repository->all();
     }
 
@@ -31,7 +41,11 @@ class CsvQuestionsRepositoryTest extends TestCase
     public function it_throws_parsing_exception_when_unexpected_json_structure_provided($jsonPath): void
     {
         $this->expectException(ParsingException::class);
-        $repository = new CsvQuestionsRepository(new CsvTransformer(), $jsonPath);
+        $repository = new FileQuestionsRepository(
+            new CsvTransformer(),
+            new CsvFileDecoder(),
+            $jsonPath
+        );
         $repository->all();
     }
 
@@ -47,7 +61,11 @@ class CsvQuestionsRepositoryTest extends TestCase
     /** @test */
     public function it_fetches_repositories_from_json_file(): void
     {
-        $repository = new CsvQuestionsRepository(new CsvTransformer(), __DIR__.'/csvs/questions.csv');
+        $repository = new FileQuestionsRepository(
+            new CsvTransformer(),
+            new CsvFileDecoder(),
+            __DIR__.'/csvs/questions.csv'
+        );
 
         $questions = $repository->all();
 

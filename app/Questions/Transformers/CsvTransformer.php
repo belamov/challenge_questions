@@ -5,31 +5,17 @@ namespace Questions\Transformers;
 use DateTime;
 use DateTimeInterface;
 use JsonException;
-use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\ParsingException;
 use Throwable;
 
-class CsvTransformer
+class CsvTransformer extends AbstractTransformer
 {
     /**
      * @throws ParsingException
      * @throws JsonException
      */
-    public function transform(array $data): Question
-    {
-        $createdAt = $this->parseCreatedAt($data);
-        $text = $this->parseText($data);
-        $choices = $this->parseChoices($data);
-
-        return new Question($text, $createdAt, $choices);
-    }
-
-    /**
-     * @throws ParsingException
-     * @throws JsonException
-     */
-    protected function parseCreatedAt($data): DateTimeInterface
+    protected function parseCreatedAt(array $data): DateTimeInterface
     {
         try {
             return new DateTime($data[1]);
@@ -45,7 +31,7 @@ class CsvTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseText($data): string
+    protected function parseText(array $data): string
     {
         try {
             return $data[0];
@@ -61,7 +47,7 @@ class CsvTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseChoices($data): array
+    protected function parseChoices(array $data): array
     {
         try {
             return [
