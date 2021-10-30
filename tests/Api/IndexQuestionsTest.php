@@ -1,16 +1,15 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Repositories\QuestionsRepositoryInterface;
+use Questions\Services\Translation\Engines\TranslatorEngineInterface;
 
 class IndexQuestionsTest extends TestCase
 {
     /** @test */
-    public function it_fetches_questions(): void
+    public function it_fetches_translated_questions(): void
     {
         $question1 = new Question(
             'text1',
@@ -40,10 +39,27 @@ class IndexQuestionsTest extends TestCase
                 $mock->shouldReceive('all')->once()->andReturn($questions);
             })
         );
+        $this->app->instance(
+            TranslatorEngineInterface::class,
+            $this->getMockedTranslationEngine()
+        );
 
-        $this->get(route('questions.index'));
+        $this->get(route('questions.index', ['lang' => 'ru']));
         $this->response->assertOk();
-        $this->seeJsonEquals([$question1->toArray(), $question2->toArray()]);
+        $translatedQuestion1 = $question1
+            ->translate(
+                $this->getMockedTranslationEngine(),
+                'ru'
+            );
+        $translatedQuestion2 = $question2
+            ->translate(
+                $this->getMockedTranslationEngine(),
+                'ru'
+            );
+        $this->seeJsonEquals([
+            $translatedQuestion1->toArray(),
+            $translatedQuestion2->toArray(),
+        ]);
         $this->seeJsonStructure([
             '*' => [
                 'text',
@@ -55,5 +71,21 @@ class IndexQuestionsTest extends TestCase
                 ]
             ]
         ]);
+    }
+
+    /** @test */
+    public function it_requires_lang_parameter(): void
+    {
+        $this->get(route('questions.index'));
+        $this->response->assertUnprocessable();
+        $this->response->assertJsonValidationErrors('lang', null);
+    }
+
+    /** @test */
+    public function lang_parameter_should_be_2_characters_long_string(): void
+    {
+        $this->get(route('questions.index', ['lang' => 'russian']));
+        $this->response->assertUnprocessable();
+        $this->response->assertJsonValidationErrors('lang', null);
     }
 }
