@@ -1,12 +1,12 @@
 <?php
 
-namespace Questions\Decoders;
+namespace Questions\FileHandlers;
 
 use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\EncodingException;
 use Throwable;
 
-class CsvFileDecoder extends AbstractFileDecoder
+class CsvFileHandler extends AbstractFileHandler
 {
     public function decode(string $pathToFile): array
     {

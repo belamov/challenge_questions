@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
-use Questions\Decoders\AbstractFileDecoder;
-use Questions\Decoders\JsonFileDecoder;
+use Questions\FileHandlers\AbstractFileHandler;
+use Questions\FileHandlers\JsonFileHandler;
 use Questions\Repositories\FileQuestionsRepository;
 use Questions\Repositories\QuestionsRepositoryInterface;
 use Questions\Services\Translation\Engines\GoogleTranslatorEngine;
@@ -28,7 +28,7 @@ class QuestionsServiceProvider extends ServiceProvider
                 return $container->get('config')->get('questions.json_path');
             });
         $this->app->bind(QuestionsRepositoryInterface::class, FileQuestionsRepository::class);
-        $this->app->bind(AbstractFileDecoder::class, JsonFileDecoder::class);
+        $this->app->bind(AbstractFileHandler::class, JsonFileHandler::class);
         $this->app->bind(AbstractTransformer::class, JsonTransformer::class);
 
         $this->app->bind(TranslatorEngineInterface::class, GoogleTranslatorEngine::class);

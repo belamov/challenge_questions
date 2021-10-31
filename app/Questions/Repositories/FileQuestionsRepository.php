@@ -2,7 +2,7 @@
 
 namespace Questions\Repositories;
 
-use Questions\Decoders\AbstractFileDecoder;
+use Questions\FileHandlers\AbstractFileHandler;
 use Questions\Entities\Question;
 use Questions\Transformers\AbstractTransformer;
 
@@ -10,7 +10,7 @@ class FileQuestionsRepository implements QuestionsRepositoryInterface
 {
     public function __construct(
         protected AbstractTransformer $transformer,
-        protected AbstractFileDecoder $decoder,
+        protected AbstractFileHandler $decoder,
         protected string $pathToFile
     ) {
     }

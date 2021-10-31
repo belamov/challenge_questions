@@ -1,6 +1,6 @@
 <?php
 
-use Questions\Decoders\CsvFileDecoder;
+use Questions\FileHandlers\CsvFileHandler;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\DecodingException;
@@ -16,7 +16,7 @@ class CsvQuestionsRepositoryTest extends TestCase
         $this->expectException(DecodingException::class);
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
-            new CsvFileDecoder(),
+            new CsvFileHandler(),
             'invalid path to csv'
         );
         $repository->all();
@@ -28,7 +28,7 @@ class CsvQuestionsRepositoryTest extends TestCase
         $this->expectException(ParsingException::class);
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
-            new CsvFileDecoder(),
+            new CsvFileHandler(),
             __DIR__.'/csvs/invalid_questions.csv'
         );
         $repository->all();
@@ -43,7 +43,7 @@ class CsvQuestionsRepositoryTest extends TestCase
         $this->expectException(ParsingException::class);
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
-            new CsvFileDecoder(),
+            new CsvFileHandler(),
             $jsonPath
         );
         $repository->all();
@@ -63,7 +63,7 @@ class CsvQuestionsRepositoryTest extends TestCase
     {
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
-            new CsvFileDecoder(),
+            new CsvFileHandler(),
             __DIR__.'/csvs/questions.csv'
         );
 
@@ -103,7 +103,7 @@ class CsvQuestionsRepositoryTest extends TestCase
         copy(__DIR__.'/csvs/questions.csv', $filePath);
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
-            new CsvFileDecoder(),
+            new CsvFileHandler(),
             $filePath
         );
         $this->assertCount(2, $repository->all());
@@ -134,7 +134,7 @@ class CsvQuestionsRepositoryTest extends TestCase
 
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
-            new CsvFileDecoder(),
+            new CsvFileHandler(),
             $filePath
         );
         $this->assertCount(0, $repository->all());

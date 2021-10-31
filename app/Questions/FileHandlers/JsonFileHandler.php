@@ -1,13 +1,12 @@
 <?php
 
-namespace Questions\Decoders;
+namespace Questions\FileHandlers;
 
 use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\EncodingException;
-use Questions\Exceptions\ParsingException;
 use Throwable;
 
-class JsonFileDecoder extends AbstractFileDecoder
+class JsonFileHandler extends AbstractFileHandler
 {
     public function decode(string $pathToFile): array
     {

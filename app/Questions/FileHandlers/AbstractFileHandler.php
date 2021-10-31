@@ -1,11 +1,11 @@
 <?php
 
-namespace Questions\Decoders;
+namespace Questions\FileHandlers;
 
 use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\EncodingException;
 
-abstract class AbstractFileDecoder
+abstract class AbstractFileHandler
 {
     /**
      * @throws DecodingException

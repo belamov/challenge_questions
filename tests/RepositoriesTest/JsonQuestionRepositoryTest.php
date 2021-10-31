@@ -1,6 +1,6 @@
 <?php
 
-use Questions\Decoders\JsonFileDecoder;
+use Questions\FileHandlers\JsonFileHandler;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Exceptions\DecodingException;
@@ -16,7 +16,7 @@ class JsonQuestionRepositoryTest extends TestCase
         $this->expectException(DecodingException::class);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
-            new JsonFileDecoder(),
+            new JsonFileHandler(),
             'wrong path to json'
         );
         $repository->all();
@@ -28,7 +28,7 @@ class JsonQuestionRepositoryTest extends TestCase
         $this->expectException(DecodingException::class);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
-            new JsonFileDecoder(),
+            new JsonFileHandler(),
             __DIR__.'/jsons/invalid_questions.json'
         );
         $repository->all();
@@ -43,7 +43,7 @@ class JsonQuestionRepositoryTest extends TestCase
         $this->expectException(ParsingException::class);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
-            new JsonFileDecoder(),
+            new JsonFileHandler(),
             $jsonPath
         );
         $repository->all();
@@ -63,7 +63,7 @@ class JsonQuestionRepositoryTest extends TestCase
     {
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
-            new JsonFileDecoder(),
+            new JsonFileHandler(),
             __DIR__.'/jsons/questions.json'
         );
 
@@ -103,7 +103,7 @@ class JsonQuestionRepositoryTest extends TestCase
         copy(__DIR__.'/jsons/questions.json', $filePath);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
-            new JsonFileDecoder(),
+            new JsonFileHandler(),
             $filePath
         );
         $this->assertCount(2, $repository->all());
