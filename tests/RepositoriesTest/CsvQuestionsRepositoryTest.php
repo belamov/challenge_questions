@@ -3,6 +3,7 @@
 use Questions\Decoders\CsvFileDecoder;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
+use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\ParsingException;
 use Questions\Repositories\FileQuestionsRepository;
 use Questions\Transformers\CsvTransformer;
@@ -12,7 +13,7 @@ class CsvQuestionsRepositoryTest extends TestCase
     /** @test */
     public function it_throws_file_not_found_exception_if_csv_doesnt_exists(): void
     {
-        $this->expectException(ParsingException::class);
+        $this->expectException(DecodingException::class);
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
             new CsvFileDecoder(),

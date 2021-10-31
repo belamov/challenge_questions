@@ -13,7 +13,7 @@ class Translator
 
     /**
      * @param  array<Translatable>  $translatable
-     * @return array<Question>
+     * @return array<Translatable>
      */
     public function translateQuestions(array $translatable, string $language): array
     {

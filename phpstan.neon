@@ -1,0 +1,10 @@
+parameters:
+    paths:
+        - app
+
+    level: 8
+
+    excludePaths:
+        - 'tests/*'
+
+    checkMissingIterableValueType: false

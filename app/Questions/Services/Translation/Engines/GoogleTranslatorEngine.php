@@ -27,6 +27,10 @@ class GoogleTranslatorEngine implements TranslatorEngineInterface
 
             $translatedText = $this->translator->setSource()->setTarget($language)->translate($textToTranslate);
 
+            if (empty($translatedText)) {
+                return $sentences;
+            }
+
             $translatedItems = explode($separator, $translatedText);
 
             $translatedItems = array_map(static fn(string $text) => trim($text), $translatedItems);

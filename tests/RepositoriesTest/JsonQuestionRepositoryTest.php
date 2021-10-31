@@ -3,9 +3,9 @@
 use Questions\Decoders\JsonFileDecoder;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
+use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\ParsingException;
 use Questions\Repositories\FileQuestionsRepository;
-use Questions\Repositories\JsonQuestionsRepository;
 use Questions\Transformers\JsonTransformer;
 
 class JsonQuestionRepositoryTest extends TestCase
@@ -13,7 +13,7 @@ class JsonQuestionRepositoryTest extends TestCase
     /** @test */
     public function it_throws_file_not_found_exception_if_json_doesnt_exists(): void
     {
-        $this->expectException(ParsingException::class);
+        $this->expectException(DecodingException::class);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
             new JsonFileDecoder(),
@@ -25,7 +25,7 @@ class JsonQuestionRepositoryTest extends TestCase
     /** @test */
     public function it_throws_json_exception_when_invalid_json_provided(): void
     {
-        $this->expectException(ParsingException::class);
+        $this->expectException(DecodingException::class);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
             new JsonFileDecoder(),

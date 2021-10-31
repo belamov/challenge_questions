@@ -24,7 +24,9 @@ class QuestionsServiceProvider extends ServiceProvider
     {
         $this->app->when(FileQuestionsRepository::class)
             ->needs('$pathToFile')
-            ->giveConfig('questions.json_path');
+            ->give(function ($container) {
+                return $container->get('config')->get('questions.json_path');
+            });
         $this->app->bind(QuestionsRepositoryInterface::class, FileQuestionsRepository::class);
         $this->app->bind(AbstractFileDecoder::class, JsonFileDecoder::class);
         $this->app->bind(AbstractTransformer::class, JsonTransformer::class);

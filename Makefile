@@ -37,17 +37,19 @@ infection: check-environment ## Run infection
 test: check-environment ## Execute tests
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" /app/vendor/bin/phpunit
 
+phpstan: check-environment ## Execute tests
+	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" /app/vendor/bin/phpstan
+
 composer-validate: ## Validate composer file
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer validate --strict
 
 composer-require-check: ## Check soft dependencies
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer-require-checker check --config-file=composer-require-checker.json composer.json
 
-
 composer-unused: ## Check soft dependencies
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer-unused
 
-check: check-environment composer-validate test composer-unused composer-require-check ## Run tests and code analysis
+check: check-environment test phpstan composer-validate composer-unused composer-require-check ## Run tests and code analysis
 
 shell: check-environment ## Run shell environment in container
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -u $(user_id) "$(php_container_name)" /bin/bash

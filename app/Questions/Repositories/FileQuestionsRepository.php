@@ -2,13 +2,9 @@
 
 namespace Questions\Repositories;
 
-use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Questions\Decoders\AbstractFileDecoder;
 use Questions\Entities\Question;
-use Questions\Exceptions\ParsingException;
 use Questions\Transformers\AbstractTransformer;
-use Questions\Transformers\CsvTransformer;
 
 class FileQuestionsRepository implements QuestionsRepositoryInterface
 {
@@ -19,12 +15,8 @@ class FileQuestionsRepository implements QuestionsRepositoryInterface
     ) {
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function all(): array
     {
-        $this->decoder->checkFileExists($this->pathToFile);
         $decodedQuestions = $this->decoder->decode($this->pathToFile);
         return array_map(fn(array $question) => $this->transformer->transformFromFile($question), $decodedQuestions);
     }

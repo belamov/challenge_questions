@@ -2,31 +2,33 @@
 
 namespace Questions\Decoders;
 
+use Questions\Exceptions\DecodingException;
+use Questions\Exceptions\EncodingException;
 use Questions\Exceptions\ParsingException;
 use Throwable;
 
 class JsonFileDecoder extends AbstractFileDecoder
 {
-    /**
-     * @throws ParsingException
-     */
     public function decode(string $pathToFile): array
     {
         //for now lets assume that json files suppose to be small,
         //so we will manage them in memory with no problems
         try {
-            return json_decode(file_get_contents($pathToFile), true, 512, JSON_THROW_ON_ERROR);
+            $json = file_get_contents($pathToFile);
+
+            if (!$json) {
+                throw new DecodingException("file '$pathToFile' not found");
+            }
+
+            return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         } catch (Throwable $exception) {
-            throw new ParsingException(
-                message: "cant parse json file '$pathToFile'",
+            throw new DecodingException(
+                message: "cant read json file '$pathToFile', it seems invalid",
                 previous: $exception,
             );
         }
     }
 
-    /**
-     * @throws ParsingException
-     */
     public function encode(array $data): string
     {
         //for now lets assume that json files suppose to be small,
@@ -34,7 +36,7 @@ class JsonFileDecoder extends AbstractFileDecoder
         try {
             return json_encode($data, JSON_THROW_ON_ERROR);
         } catch (Throwable $exception) {
-            throw new ParsingException(
+            throw new EncodingException(
                 message: 'cannot encode array to json',
                 previous: $exception
             );

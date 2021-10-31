@@ -2,14 +2,12 @@
 
 namespace Questions\Decoders;
 
-use Questions\Exceptions\ParsingException;
+use Questions\Exceptions\DecodingException;
+use Questions\Exceptions\EncodingException;
 use Throwable;
 
 class CsvFileDecoder extends AbstractFileDecoder
 {
-    /**
-     * @throws ParsingException
-     */
     public function decode(string $pathToFile): array
     {
         //for now lets assume that csv files suppose to be small,
@@ -28,15 +26,15 @@ class CsvFileDecoder extends AbstractFileDecoder
             }
             return $result;
         } catch (Throwable $exception) {
-            throw new ParsingException(
-                message: "cant parse csv file '$pathToFile'",
+            throw new DecodingException(
+                message: "cant decode csv file '$pathToFile'",
                 previous: $exception,
             );
         }
     }
 
     /**
-     * @throws ParsingException
+     * @throws EncodingException
      */
     public function encode(array $data): string
     {
@@ -44,14 +42,26 @@ class CsvFileDecoder extends AbstractFileDecoder
         //so we will manage them in memory with no problems
         try {
             $f = fopen('php://memory', 'rb+');
+
+            if (!$f) {
+                throw new EncodingException('couldnt create file in memory for encoding csv');
+            }
+
             fputcsv($f, ["Question text", "Created At", "Choice 1", "Choice 2", "Choice 3"]);
             foreach ($data as $item) {
                 fputcsv($f, $item);
             }
             rewind($f);
-            return stream_get_contents($f);
+
+            $result = stream_get_contents($f);
+
+            if (!$result) {
+                throw new EncodingException('couldnt read from in-memory file for encoding csv');
+            }
+
+            return $result;
         } catch (Throwable $exception) {
-            throw new ParsingException(
+            throw new EncodingException(
                 message: "cant encode array to csv",
                 previous: $exception,
             );
