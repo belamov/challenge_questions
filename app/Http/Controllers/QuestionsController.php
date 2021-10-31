@@ -8,11 +8,11 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
+use Laravel\Lumen\Routing\Controller as BaseController;
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Repositories\QuestionsRepositoryInterface;
 use Questions\Services\Translation\Translator;
-use Laravel\Lumen\Routing\Controller as BaseController;
 
 class QuestionsController extends BaseController
 {
@@ -35,7 +35,7 @@ class QuestionsController extends BaseController
 
         $language = $request->get('lang');
 
-        $translatedQuestions = $this->translator->translateQuestions($questions, $language);
+        $translatedQuestions = $this->translator->translateItems($questions, $language);
 
         return JsonResource::collection($translatedQuestions);
     }
@@ -55,9 +55,11 @@ class QuestionsController extends BaseController
         $newQuestion = new Question(
             text: $request->get('text'),
             createdAt: new DateTime($request->get('createdAt')),
-            choices: array_map(
-                static fn(array $choice) => new QuestionChoice($choice['text']),
-                $request->get('choices')
+            choices: QuestionChoicesCollection::fromArray(
+                array_map(
+                    static fn(array $choice) => $choice['text'],
+                    $request->get('choices')
+                )
             )
         );
 

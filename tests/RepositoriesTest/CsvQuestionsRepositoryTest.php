@@ -1,10 +1,11 @@
 <?php
 
-use Questions\FileHandlers\CsvFileHandler;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\ParsingException;
+use Questions\FileHandlers\CsvFileHandler;
 use Questions\Repositories\FileQuestionsRepository;
 use Questions\Transformers\CsvTransformer;
 
@@ -72,7 +73,7 @@ class CsvQuestionsRepositoryTest extends TestCase
         $this->assertInstanceOf(Question::class, $questions[0]);
         $this->assertEquals("What is the capital of Luxembourg ?", $questions[0]->getText());
         $this->assertEquals(new DateTime("2019-06-01 00:00:00"), $questions[0]->getCreatedAt());
-        $this->assertIsArray($questions[0]->getChoices());
+        $this->assertInstanceOf(QuestionChoicesCollection::class, $questions[0]->getChoices());
         $choices = $questions[0]->getChoices();
         $this->assertCount(3, $choices);
         foreach ($choices as $choice) {
@@ -85,7 +86,7 @@ class CsvQuestionsRepositoryTest extends TestCase
         $this->assertInstanceOf(Question::class, $questions[1]);
         $this->assertEquals("What does mean O.A.T. ?", $questions[1]->getText());
         $this->assertEquals(new DateTime("2019-06-02 00:00:00"), $questions[1]->getCreatedAt());
-        $this->assertIsArray($questions[1]->getChoices());
+        $this->assertInstanceOf(QuestionChoicesCollection::class, $questions[1]->getChoices());
         $choices = $questions[1]->getChoices();
         $this->assertCount(3, $choices);
         foreach ($choices as $choice) {
@@ -111,11 +112,11 @@ class CsvQuestionsRepositoryTest extends TestCase
         $newQuestion = new Question(
             'text',
             new DateTime(),
-            [
-                new QuestionChoice('choice1'),
-                new QuestionChoice('choice2'),
-                new QuestionChoice('choice3'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'choice1',
+                'choice2',
+                'choice2'
+            ])
         );
 
         $addedQuestion = $repository->add($newQuestion);
@@ -135,11 +136,11 @@ class CsvQuestionsRepositoryTest extends TestCase
         $newQuestion = new Question(
             'text',
             new DateTime(),
-            [
-                new QuestionChoice('choice1'),
-                new QuestionChoice('choice2'),
-                new QuestionChoice('choice3'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'choice1',
+                'choice2',
+                'choice2'
+            ])
         );
 
         $fileHandler = new CsvFileHandler();

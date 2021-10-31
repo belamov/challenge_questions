@@ -2,13 +2,9 @@
 
 namespace Questions\Transformers;
 
-use DateTime;
 use DateTimeInterface;
-use JsonException;
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
-use Questions\Exceptions\ParsingException;
-use Throwable;
+use Questions\Entities\QuestionChoicesCollection;
 
 abstract class AbstractTransformer
 {
@@ -25,10 +21,7 @@ abstract class AbstractTransformer
 
     abstract protected function parseCreatedAt(array $data): DateTimeInterface;
 
-    /**
-     * @return array<QuestionChoice>
-     */
-    abstract protected function parseChoices(array $data): array;
+    abstract protected function parseChoices(array $data): QuestionChoicesCollection;
 
     abstract public function transformToFile(Question $question): array;
 }

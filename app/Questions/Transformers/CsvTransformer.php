@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeInterface;
 use JsonException;
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Exceptions\ParsingException;
 use Throwable;
 
@@ -14,9 +14,7 @@ class CsvTransformer extends AbstractTransformer
 {
     private const QUESTION_TEXT_INDEX = 0;
     private const QUESTION_CREATED_AT_INDEX = 1;
-    private const CHOICE_1_TEXT_INDEX = 2;
-    private const CHOICE_2_TEXT_INDEX = 3;
-    private const CHOICE_3_TEXT_INDEX = 4;
+    private const QUESTION_CHOICES_INDEX_START = 2;
 
     /**
      * @throws ParsingException
@@ -54,14 +52,16 @@ class CsvTransformer extends AbstractTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseChoices(array $data): array
+    protected function parseChoices(array $data): QuestionChoicesCollection
     {
         try {
-            return [
-                new QuestionChoice($data[self::CHOICE_1_TEXT_INDEX]),
-                new QuestionChoice($data[self::CHOICE_2_TEXT_INDEX]),
-                new QuestionChoice($data[self::CHOICE_3_TEXT_INDEX]),
-            ];
+            return QuestionChoicesCollection::fromArray(
+                array_slice(
+                    $data,
+                    self::QUESTION_CHOICES_INDEX_START,
+                    QuestionChoicesCollection::AVAILABLE_CHOICES_COUNT
+                )
+            );
         } catch (Throwable $exception) {
             throw new ParsingException(
                 message: "unable to parse choices from csv: ".json_encode($data, JSON_THROW_ON_ERROR),
@@ -76,9 +76,9 @@ class CsvTransformer extends AbstractTransformer
 
         $data[self::QUESTION_TEXT_INDEX] = $question->getText();
         $data[self::QUESTION_CREATED_AT_INDEX] = $question->getCreatedAt()->format('Y-m-d H:i:s');
-        $data[self::CHOICE_1_TEXT_INDEX] = $question->getChoices()[0]->getText();
-        $data[self::CHOICE_2_TEXT_INDEX] = $question->getChoices()[1]->getText();
-        $data[self::CHOICE_3_TEXT_INDEX] = $question->getChoices()[2]->getText();
+        foreach ($question->getChoices()->getTexts() as $choiceNumber => $choiceText) {
+            $data[self::QUESTION_CHOICES_INDEX_START + $choiceNumber] = $choiceText;
+        }
 
         return $data;
     }

@@ -2,7 +2,7 @@
 
 use Mockery\MockInterface;
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Repositories\QuestionsRepositoryInterface;
 use Questions\Services\Translation\Engines\TranslatorEngineInterface;
 
@@ -14,20 +14,20 @@ class IndexQuestionsTest extends TestCase
         $question1 = new Question(
             'text1',
             new DateTime('2019-06-01 00:00:00'),
-            [
-                new QuestionChoice('choice1'),
-                new QuestionChoice('choice2'),
-                new QuestionChoice('choice3'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'choice1',
+                'choice2',
+                'choice3'
+            ])
         );
         $question2 = new Question(
             'text2',
             new DateTime('2019-06-01 00:00:00'),
-            [
-                new QuestionChoice('choice1'),
-                new QuestionChoice('choice2'),
-                new QuestionChoice('choice3'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'choice1',
+                'choice2',
+                'choice3'
+            ])
         );
         $questions = [
             $question1,

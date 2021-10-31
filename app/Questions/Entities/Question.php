@@ -4,6 +4,8 @@ namespace Questions\Entities;
 
 use DateTimeInterface;
 use Illuminate\Contracts\Support\Arrayable;
+use Questions\Exceptions\QuestionsException;
+use Questions\Exceptions\TranslationException;
 use Questions\Services\Translation\Engines\TranslatorEngineInterface;
 use Questions\Services\Translation\Translatable;
 
@@ -12,12 +14,12 @@ class Question implements Arrayable, Translatable
     /**
      * @param  string  $text
      * @param  DateTimeInterface  $createdAt
-     * @param  array<QuestionChoice>  $choices
+     * @param  QuestionChoicesCollection  $choices
      */
     public function __construct(
         private string $text,
         private DateTimeInterface $createdAt,
-        private array $choices,
+        private QuestionChoicesCollection $choices,
     ) {
     }
 
@@ -31,10 +33,7 @@ class Question implements Arrayable, Translatable
         return $this->createdAt;
     }
 
-    /**
-     * @return array<QuestionChoice>
-     */
-    public function getChoices(): array
+    public function getChoices(): QuestionChoicesCollection
     {
         return $this->choices;
     }
@@ -44,27 +43,32 @@ class Question implements Arrayable, Translatable
         return [
             'text' => $this->getText(),
             'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
-            'choices' => array_map(static fn(QuestionChoice $choice) => $choice->toArray(), $this->getChoices())
+            'choices' => $this->choices->toArray()
         ];
     }
 
+    /**
+     * @throws TranslationException
+     */
     public function translate(TranslatorEngineInterface $translatorEngine, string $language): Question
     {
-        $itemsToTranslate = [
-            $this->text
-        ];
-        foreach ($this->choices as $choice) {
-            $itemsToTranslate[] = $choice->getText();
-        }
+        $itemsToTranslate = array_merge([$this->text], $this->choices->getTexts());
 
         $translatedItems = $translatorEngine->translate($itemsToTranslate, $language);
 
         $translatedQuestionText = array_shift($translatedItems);
 
-        return new self(
-            $translatedQuestionText,
-            $this->createdAt,
-            array_map(static fn($translatedChoiceText) => new QuestionChoice($translatedChoiceText), $translatedItems)
-        );
+        try {
+            return new self(
+                $translatedQuestionText,
+                $this->createdAt,
+                QuestionChoicesCollection::fromArray($translatedItems)
+            );
+        } catch (QuestionsException $e) {
+            throw new TranslationException(
+                message: 'there was error while translating question choices',
+                previous: $e
+            );
+        }
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Questions\Services\Translation;
 
-use Questions\Entities\Question;
 use Questions\Services\Translation\Engines\TranslatorEngineInterface;
 
 class Translator
@@ -15,7 +14,7 @@ class Translator
      * @param  array<Translatable>  $translatable
      * @return array<Translatable>
      */
-    public function translateQuestions(array $translatable, string $language): array
+    public function translateItems(array $translatable, string $language): array
     {
         return array_map(
             fn(Translatable $translatable) => $translatable->translate($this->translatorEngine, $language),

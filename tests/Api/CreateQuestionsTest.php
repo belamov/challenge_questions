@@ -3,7 +3,7 @@
 
 use Mockery\MockInterface;
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Repositories\QuestionsRepositoryInterface;
 
 class CreateQuestionsTest extends TestCase
@@ -14,11 +14,11 @@ class CreateQuestionsTest extends TestCase
         $question = new Question(
             'text1',
             new DateTime('2019-06-01 00:00:00'),
-            [
-                new QuestionChoice('choice1'),
-                new QuestionChoice('choice2'),
-                new QuestionChoice('choice3'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'choice1',
+                'choice2',
+                'choice3',
+            ])
         );
         $this->app->instance(
             QuestionsRepositoryInterface::class,

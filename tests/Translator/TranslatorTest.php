@@ -1,7 +1,7 @@
 <?php
 
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Services\Translation\Translatable;
 use Questions\Services\Translation\Translator;
 
@@ -13,11 +13,11 @@ class TranslatorTest extends TestCase
         $question = new Question(
             'some text',
             new DateTime(),
-            [
-                new QuestionChoice('Some Choice'),
-                new QuestionChoice('Open Assignment Technologies'),
-                new QuestionChoice('weird choice'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'Some Choice',
+                'Open Assignment Technologies',
+                'weird choice',
+            ])
         );
         $this->assertInstanceOf(Translatable::class, $question);
 
@@ -40,20 +40,20 @@ class TranslatorTest extends TestCase
         $question1 = new Question(
             'some text',
             new DateTime(),
-            [
-                new QuestionChoice('Some Choice'),
-                new QuestionChoice('Open Assignment Technologies'),
-                new QuestionChoice('weird choice'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'Some Choice',
+                'Open Assignment Technologies',
+                'weird choice',
+            ])
         );
         $question2 = new Question(
             'some text',
             new DateTime(),
-            [
-                new QuestionChoice('Open '),
-                new QuestionChoice('Some'),
-                new QuestionChoice('weird choice'),
-            ]
+            QuestionChoicesCollection::fromArray([
+                'Some Choice',
+                'Open Assignment Technologies',
+                'weird choice',
+            ])
         );
 
         $translatedQuestionText = 'translated text';
@@ -61,7 +61,7 @@ class TranslatorTest extends TestCase
         $mockedTranslationEngine = $this->getMockedTranslationEngine($translatedChoiceText, $translatedQuestionText);
 
         $translator = new Translator($mockedTranslationEngine);
-        $translatedQuestions = $translator->translateQuestions([$question1, $question2], 'ru');
+        $translatedQuestions = $translator->translateItems([$question1, $question2], 'ru');
         foreach ($translatedQuestions as $translatedQuestion) {
             $this->assertInstanceOf(Question::class, $translatedQuestion);
             $this->assertEquals($translatedQuestionText, $translatedQuestion->getText());

@@ -6,7 +6,7 @@ use DateTime;
 use DateTimeInterface;
 use JsonException;
 use Questions\Entities\Question;
-use Questions\Entities\QuestionChoice;
+use Questions\Entities\QuestionChoicesCollection;
 use Questions\Exceptions\ParsingException;
 use Throwable;
 
@@ -53,11 +53,13 @@ class JsonTransformer extends AbstractTransformer
      * @throws ParsingException
      * @throws JsonException
      */
-    protected function parseChoices(array $data): array
+    protected function parseChoices(array $data): QuestionChoicesCollection
     {
         try {
             $choices = $data[self::QUESTION_CHOICES_KEY];
-            return array_map(static fn($choice) => new QuestionChoice($choice[self::CHOICE_TEXT_KEY]), $choices);
+            return QuestionChoicesCollection::fromArray(
+                array_map(static fn($choice) => $choice[self::CHOICE_TEXT_KEY], $choices)
+            );
         } catch (Throwable $exception) {
             throw new ParsingException(
                 message: "unable to parse json: ".json_encode($data, JSON_THROW_ON_ERROR),
@@ -73,8 +75,8 @@ class JsonTransformer extends AbstractTransformer
             self::QUESTION_CREATED_AT_KEY => $question->getCreatedAt()->format('Y-m-d H:i:s'),
             self::QUESTION_CHOICES_KEY => [],
         ];
-        foreach ($question->getChoices() as $choice) {
-            $data[self::QUESTION_CHOICES_KEY][] = [self::CHOICE_TEXT_KEY => $choice->getText()];
+        foreach ($question->getChoices()->getTexts() as $choiceText) {
+            $data[self::QUESTION_CHOICES_KEY][] = [self::CHOICE_TEXT_KEY => $choiceText];
         }
         return $data;
     }
