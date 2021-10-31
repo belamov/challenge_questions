@@ -2,6 +2,8 @@
 
 this is a technical exercise for job assessment (php backend developer position)
 
+you can watch me livecoding this excercise from scratch [here](https://www.youtube.com/watch?v=T0CjQw54tP0)
+
 you can read task [here](task.md)
 
 ## How to run:
