@@ -41,7 +41,8 @@ composer-validate: ## Validate composer file
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer validate --strict
 
 composer-require-check: ## Check soft dependencies
-	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer-require-checker check --config-file=composer-require-checker.json
+	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer-require-checker check --config-file=composer-require-checker.json composer.json
+
 
 composer-unused: ## Check soft dependencies
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer-unused

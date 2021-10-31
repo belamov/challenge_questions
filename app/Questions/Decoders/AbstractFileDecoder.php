@@ -2,17 +2,17 @@
 
 namespace Questions\Decoders;
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Questions\Exceptions\ParsingException;
 
 abstract class AbstractFileDecoder
 {
     /**
-     * @throws FileNotFoundException
+     * @throws ParsingException
      */
     public function checkFileExists(string $pathToFile): void
     {
         if (!file_exists($pathToFile)) {
-            throw new FileNotFoundException("file '$pathToFile' not found");
+            throw new ParsingException("file '$pathToFile' not found");
         }
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Questions\Decoders\CsvFileDecoder;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
@@ -13,7 +12,7 @@ class CsvQuestionsRepositoryTest extends TestCase
     /** @test */
     public function it_throws_file_not_found_exception_if_csv_doesnt_exists(): void
     {
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(ParsingException::class);
         $repository = new FileQuestionsRepository(
             new CsvTransformer(),
             new CsvFileDecoder(),

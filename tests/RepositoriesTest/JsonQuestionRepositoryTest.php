@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Questions\Decoders\JsonFileDecoder;
 use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
@@ -14,7 +13,7 @@ class JsonQuestionRepositoryTest extends TestCase
     /** @test */
     public function it_throws_file_not_found_exception_if_json_doesnt_exists(): void
     {
-        $this->expectException(FileNotFoundException::class);
+        $this->expectException(ParsingException::class);
         $repository = new FileQuestionsRepository(
             new JsonTransformer(),
             new JsonFileDecoder(),
