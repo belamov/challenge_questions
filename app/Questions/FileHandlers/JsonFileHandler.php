@@ -6,12 +6,18 @@ use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\EncodingException;
 use Throwable;
 
+/**
+ * we assume that files will be small,
+ * so we will handle them in memory without problems
+ *
+ * if files will become too big to handle them in memory,
+ * we will use some more efficient repository implementation
+ * for questions, like database
+ */
 class JsonFileHandler extends AbstractFileHandler
 {
     public function decode(string $pathToFile): array
     {
-        //for now lets assume that json files suppose to be small,
-        //so we will manage them in memory with no problems
         try {
             $json = file_get_contents($pathToFile);
 
@@ -30,8 +36,6 @@ class JsonFileHandler extends AbstractFileHandler
 
     public function encode(array $data): string
     {
-        //for now lets assume that json files suppose to be small,
-        //so we will manage them in memory with no problems
         try {
             return json_encode($data, JSON_THROW_ON_ERROR);
         } catch (Throwable $exception) {

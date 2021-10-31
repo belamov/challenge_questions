@@ -40,7 +40,5 @@ for api documentation check [open-api.yml](open-api.yaml)
 - [x] make composer-require-checker pass
 - [x] add other checks (except tests) to ci - move ci to docker
 - [ ] validation of language query parameter - it must be ISO-639-1 code
-- [ ] handling big json files?
-- [ ] handling concurrent json writing?
-- [ ] handling big csv files?
-- [ ] handling concurrent csv writing?
+- [ ] ??? handling concurrent json writing
+- [ ] ??? handling concurrent csv writing

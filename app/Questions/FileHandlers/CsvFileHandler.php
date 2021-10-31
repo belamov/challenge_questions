@@ -6,12 +6,18 @@ use Questions\Exceptions\DecodingException;
 use Questions\Exceptions\EncodingException;
 use Throwable;
 
+/**
+ * we assume that files will be small,
+ * so we will handle them in memory without problems
+ *
+ * if files will become too big to handle them in memory,
+ * we will use some more efficient repository implementation
+ * for questions, like database
+ */
 class CsvFileHandler extends AbstractFileHandler
 {
     public function decode(string $pathToFile): array
     {
-        //for now lets assume that csv files suppose to be small,
-        //so we will manage them in memory with no problems
         try {
             $result = [];
             $row = 0;
@@ -45,8 +51,6 @@ class CsvFileHandler extends AbstractFileHandler
      */
     public function encode(array $data): string
     {
-        //for now lets assume that csv files suppose to be small,
-        //so we will manage them in memory with no problems
         try {
             $f = fopen('php://memory', 'rb+');
 
