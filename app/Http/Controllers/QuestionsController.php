@@ -12,8 +12,9 @@ use Questions\Entities\Question;
 use Questions\Entities\QuestionChoice;
 use Questions\Repositories\QuestionsRepositoryInterface;
 use Questions\Services\Translation\Translator;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
-class QuestionsController extends Controller
+class QuestionsController extends BaseController
 {
     public function __construct(
         protected QuestionsRepositoryInterface $questionsRepository,
