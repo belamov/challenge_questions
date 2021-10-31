@@ -2,9 +2,11 @@
 
 this is a technical exercise for job assessment (php backend developer position)
 
+you can watch me livecoding this excercise from scratch [here](https://www.youtube.com/watch?v=T0CjQw54tP0)
+
 you can read task [here](task.md)
 
-## How to run:
+### how to run:
 
 ```shell
 make up
@@ -35,8 +37,8 @@ for api documentation check [open-api.yml](open-api.yaml)
 - [x] fetching translated questions with api
 - [x] adding new questions
 - [x] endpoint for adding new question
-- [ ] make composer-require-checker pass
-- [ ] add other checks (except tests) to ci - move ci to docker
+- [x] make composer-require-checker pass
+- [x] add other checks (except tests) to ci - move ci to docker
 - [ ] validation of language query parameter - it must be ISO-639-1 code
 - [ ] handling big json files?
 - [ ] handling concurrent json writing?
