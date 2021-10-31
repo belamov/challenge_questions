@@ -2,6 +2,7 @@ version: '3.5'
 
 services:
   php:
+    image: questions
     build:
       context: ../
       dockerfile: docker/ci/Dockerfile
