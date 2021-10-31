@@ -5,7 +5,3 @@ services:
     build:
       context: ../
       dockerfile: docker/ci/Dockerfile
-    volumes:
-      - ../:/app
-    ports:
-      - "8000:8000"
