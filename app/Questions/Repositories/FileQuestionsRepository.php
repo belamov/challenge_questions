@@ -10,22 +10,22 @@ class FileQuestionsRepository implements QuestionsRepositoryInterface
 {
     public function __construct(
         protected AbstractTransformer $transformer,
-        protected AbstractFileHandler $decoder,
+        protected AbstractFileHandler $fileHandler,
         protected string $pathToFile
     ) {
     }
 
     public function all(): array
     {
-        $decodedQuestions = $this->decoder->decode($this->pathToFile);
+        $decodedQuestions = $this->fileHandler->decode($this->pathToFile);
         return array_map(fn(array $question) => $this->transformer->transformFromFile($question), $decodedQuestions);
     }
 
     public function add(Question $question): Question
     {
-        $questions = $this->decoder->decode($this->pathToFile);
+        $questions = $this->fileHandler->decode($this->pathToFile);
         $questions[] = $this->transformer->transformToFile($question);
-        $text = $this->decoder->encode($questions);
+        $text = $this->fileHandler->encode($questions);
         file_put_contents($this->pathToFile, $text, LOCK_EX);
         return $question;
     }

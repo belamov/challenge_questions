@@ -19,7 +19,7 @@ class JsonFileHandler extends AbstractFileHandler
                 throw new DecodingException("file '$pathToFile' not found");
             }
 
-            return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            return json_decode($json, true, flags: JSON_THROW_ON_ERROR);
         } catch (Throwable $exception) {
             throw new DecodingException(
                 message: "cant read json file '$pathToFile', it seems invalid",

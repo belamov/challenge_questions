@@ -132,13 +132,6 @@ class CsvQuestionsRepositoryTest extends TestCase
         $f = fopen($filePath, 'wb');
         fclose($f);
 
-        $repository = new FileQuestionsRepository(
-            new CsvTransformer(),
-            new CsvFileHandler(),
-            $filePath
-        );
-        $this->assertCount(0, $repository->all());
-
         $newQuestion = new Question(
             'text',
             new DateTime(),
@@ -149,10 +142,21 @@ class CsvQuestionsRepositoryTest extends TestCase
             ]
         );
 
-        $addedQuestion = $repository->add($newQuestion);
-        $this->assertEquals($newQuestion, $addedQuestion);
-        $this->assertCount(1, $repository->all());
-        $this->assertEquals($newQuestion->toArray(), $repository->all()[0]->toArray());
+        $fileHandler = new CsvFileHandler();
+        $transformer = new CsvTransformer();
+
+        $fileContents = $fileHandler->encode([$transformer->transformToFile($newQuestion)]);
+        $rows = explode(PHP_EOL, $fileContents);
+        // one empty line in the end
+        $this->assertCount(3, $rows);
+
+        $generatedHeadingRow = explode(',', $rows[0]);
+        $this->assertCount(5, $generatedHeadingRow);
+        $this->assertEquals('"Question text"', $generatedHeadingRow[0]);
+        $this->assertEquals('"Created At"', $generatedHeadingRow[1]);
+        $this->assertEquals('"Choice 1"', $generatedHeadingRow[2]);
+        $this->assertEquals('"Choice 2"', $generatedHeadingRow[3]);
+        $this->assertEquals('"Choice 3"', $generatedHeadingRow[4]);
         unlink($filePath);
     }
 }

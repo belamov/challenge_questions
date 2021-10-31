@@ -21,14 +21,14 @@ class TranslatorTest extends TestCase
         );
         $this->assertInstanceOf(Translatable::class, $question);
 
-        $translatedQuestionText = 'translated text';
-        $translatedChoiceText = 'translated text';
+        $translatedQuestionText = 'translated question text';
+        $translatedChoiceText = 'translated choice text';
         $mockedTranslationEngine = $this->getMockedTranslationEngine($translatedChoiceText, $translatedQuestionText);
 
         $translatedQuestion = $question->translate($mockedTranslationEngine, 'ru');
 
         $this->assertInstanceOf(Question::class, $translatedQuestion);
-        $this->assertEquals($translatedChoiceText, $translatedQuestion->getText());
+        $this->assertEquals($translatedQuestionText, $translatedQuestion->getText());
         foreach ($translatedQuestion->getChoices() as $translatedChoice) {
             $this->assertEquals($translatedChoiceText, $translatedChoice->getText());
         }

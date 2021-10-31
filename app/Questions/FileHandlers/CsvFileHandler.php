@@ -15,15 +15,22 @@ class CsvFileHandler extends AbstractFileHandler
         try {
             $result = [];
             $row = 0;
-            if (($handle = fopen($pathToFile, 'rb')) !== false) {
-                while (($data = fgetcsv($handle)) !== false) {
-                    if ($row !== 0) {
-                        $result[] = $data;
-                    }
-                    $row++;
-                }
-                fclose($handle);
+
+            $handle = fopen($pathToFile, 'rb');
+
+            if (!$handle) {
+                throw new DecodingException("couldnt open file '$pathToFile' for read");
             }
+
+            while (($data = fgetcsv($handle)) !== false) {
+                if ($row > 0) {
+                    $result[] = $data;
+                }
+                $row++;
+            }
+
+            fclose($handle);
+
             return $result;
         } catch (Throwable $exception) {
             throw new DecodingException(

@@ -4,3 +4,5 @@ Homestead.json
 Homestead.yaml
 .env
 .phpunit.*
+infection.log
+per-mutator.md

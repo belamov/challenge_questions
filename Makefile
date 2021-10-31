@@ -32,7 +32,7 @@ update: check-environment ## Update dependencies
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" composer update
 
 infection: check-environment ## Run infection
-	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=coverage "$(php_container_name)" vendor/bin/infection
+	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=coverage "$(php_container_name)" vendor/bin/infection -v
 
 test: check-environment ## Execute tests
 	$(docker_compose_bin) --file "$(docker_compose_yml)" run --rm -e XDEBUG_MODE=off "$(php_container_name)" /app/vendor/bin/phpunit

@@ -48,6 +48,17 @@ class CreateQuestionsTest extends TestCase
         return [
             [
                 [
+                    'createdAt' => '2019-06-01 00:00:00',
+                    'choices' => [
+                        ['text' => 'choice'],
+                        ['text' => 'choice'],
+                        ['text' => 'choice'],
+                    ]
+                ],
+                'text'
+            ],
+            [
+                [
                     'text' => 'text',
                     'createdAt' => 'invalid date',
                     'choices' => [

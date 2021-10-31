@@ -24,7 +24,9 @@ abstract class TestCase extends BaseTestCase
         return Mockery::mock(
             TranslatorEngineInterface::class,
             function (MockInterface $mock) use ($translatedChoiceText, $translatedQuestionText) {
-                $mock->shouldReceive('translate')->andReturn([
+                $mock->shouldReceive('translate')->withArgs(function ($argument) {
+                    return count($argument) === 4;
+                })->andReturn([
                     $translatedQuestionText,
                     $translatedChoiceText,
                     $translatedChoiceText,

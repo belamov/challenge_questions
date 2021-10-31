@@ -61,8 +61,8 @@ class QuestionsController extends BaseController
             )
         );
 
-        $addedQuestion = $this->questionsRepository->add($newQuestion);
+        $this->questionsRepository->add($newQuestion);
 
-        return new Response(new JsonResource($addedQuestion), Response::HTTP_CREATED);
+        return new Response(new JsonResource($newQuestion), Response::HTTP_CREATED);
     }
 }
