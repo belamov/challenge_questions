@@ -1,6 +1,6 @@
 [![tests](https://github.com/belamov/challenge_questions/actions/workflows/main.yml/badge.svg)](https://github.com/belamov/challenge_questions/actions/workflows/main.yml)
 
-this is a technical exercise for job assessment (php backend developer position)
+this is a technical exercise for assessment of my skills for backend php developer position
 
 you can watch me livecoding this excercise from scratch [here](https://www.youtube.com/watch?v=T0CjQw54tP0)
 
