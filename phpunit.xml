@@ -22,4 +22,9 @@
             <directory suffix=".php">./app</directory>
         </include>
     </coverage>
+
+    <php>
+        <env name="FILE_FORMAT" value="csv"/>
+        <env name="FILE_PATH" value="/app/questions.csv"/>
+    </php>
 </phpunit>
