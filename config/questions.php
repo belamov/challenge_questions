@@ -1,6 +1,24 @@
 <?php
 
 return [
-    'csv_path' => env('CSV_PATH', '/app/questions.csv'),
-    'json_path' => env('JSON_PATH', '/app/questions.json'),
+    /*
+  |--------------------------------------------------------------------------
+  | file path
+  |--------------------------------------------------------------------------
+  |
+  | where to store file database.
+  |
+  */
+    'file_path' => env('FILE_PATH', '/app/questions.csv'),
+
+    /*
+   |--------------------------------------------------------------------------
+   | file format
+   |--------------------------------------------------------------------------
+   |
+   | which files to use as database.
+   | available values: csv, json
+   |
+   */
+    'file_format' => env('FILE_FORMAT', 'csv'),
 ];

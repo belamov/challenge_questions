@@ -12,18 +12,15 @@ you can read task [here](task.md)
 make up
 ```
 
-service will be available at http://localhost:8080
+service will be available at http://localhost:8000
 
 ### configuration:
 
-main configuration happens at [app/Providers/QuestionsServiceProvider.php](app/Providers/QuestionsServiceProvider.php) -
-there you can easily swap repository implementations and translator engine implementations.
-
-also you can change expected path to files via env variables:
+you can configure application via env variables
 
 ```dotenv
-CSV_PATH=
-JSON_PATH=
+FILE_PATH='path to file database'
+FILE_FORMAT='csv|json'
 ```
 
 for api documentation check [open-api.yml](open-api.yaml)
