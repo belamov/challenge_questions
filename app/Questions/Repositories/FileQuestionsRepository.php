@@ -31,17 +31,20 @@ class FileQuestionsRepository implements QuestionsRepositoryInterface
      */
     public function add(Question $question): Question
     {
+        $fileResource = $this->acquireFileLock();
         $questions = $this->fileHandler->decode($this->pathToFile);
         $questions[] = $this->transformer->transformToFile($question);
         $text = $this->fileHandler->encode($questions);
-        $this->writeToFile($text);
+        $this->writeToFile($fileResource, $text);
+        $this->releaseLock($fileResource);
         return $question;
     }
 
     /**
+     * @return resource $fileResource
      * @throws FileWritingException
      */
-    protected function writeToFile(string $text): void
+    private function acquireFileLock()
     {
         $lockWait = 1;       // seconds to wait for lock
         $waitTime = 250000;  // microseconds to wait between lock attempts
@@ -63,9 +66,25 @@ class FileQuestionsRepository implements QuestionsRepositoryInterface
             fclose($fp);
             throw new FileWritingException("Could not lock '{$this->pathToFile} for write within $lockWait seconds.");
         }
-        ftruncate($fp, 0);
-        fwrite($fp, $text);
-        flock($fp, LOCK_UN);
-        fclose($fp);
+        return $fp;
+    }
+
+    /**
+     * @param  resource  $file
+     * @param  string  $text
+     */
+    protected function writeToFile($file, string $text): void
+    {
+        ftruncate($file, 0);
+        fwrite($file, $text);
+    }
+
+    /**
+     * @param  resource  $file
+     */
+    private function releaseLock($file): void
+    {
+        flock($file, LOCK_UN);
+        fclose($file);
     }
 }

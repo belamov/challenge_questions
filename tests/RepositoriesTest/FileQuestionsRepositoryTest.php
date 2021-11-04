@@ -10,7 +10,7 @@ use Questions\Transformers\CsvTransformer;
 class FileQuestionsRepositoryTest extends TestCase
 {
     /** @test */
-    public function ie_throws_exception_when_file_lock_cannot_be_acquired(): void
+    public function it_throws_exception_when_file_lock_cannot_be_acquired(): void
     {
         $this->expectException(FileWritingException::class);
         $filePath = __DIR__.'/csvs/questions.csv ';
