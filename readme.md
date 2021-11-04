@@ -36,6 +36,4 @@ for api documentation check [open-api.yml](open-api.yaml)
 - [x] endpoint for adding new question
 - [x] make composer-require-checker pass
 - [x] add other checks (except tests) to ci - move ci to docker
-- [ ] validation of language query parameter - it must be ISO-639-1 code
-- [ ] ??? handling concurrent json writing
-- [ ] ??? handling concurrent csv writing
+- [x] concurrent file writing
